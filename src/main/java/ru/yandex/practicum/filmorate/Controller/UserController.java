@@ -7,16 +7,12 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 
 @Slf4j
 @RestController
 public class UserController {
-
-   // private static final Logger log = LoggerFactory.getLogger(UserController.class);
-
     protected final HashMap<Integer, User> users = new HashMap<>();
 
     private int nextId = 0;
@@ -58,7 +54,7 @@ public class UserController {
     public User update(@RequestBody User user) throws ValidationException {
         if (!users.containsKey(user.getId())) {
             log.info("User not found");
-        throw new ValidationException("User not found");
+            throw new ValidationException("User not found");
         }
         if (user.getEmail() == null) {
             log.info("Email is empty");
@@ -84,10 +80,9 @@ public class UserController {
         log.info(user.toString());
         return user;
     }
+
     @GetMapping("/users")
-    public Collection<User> findAll(){
+    public Collection<User> findAll() {
         return users.values();
     }
-
-
 }
