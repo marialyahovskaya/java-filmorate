@@ -49,4 +49,46 @@ public class UserController {
     public Collection<User> findAll() {
         return userService.findAllUsers();
     }
+
+    @GetMapping("/users/{id}")
+    public User findUserById(@PathVariable int id) {
+        if (userService.findUserById(id) == null) {
+            log.info("User not found");
+            throw new NotFoundException("User not found");
+        }
+        return userService.findUserById(id);
+    }
+
+    @GetMapping("/users/{id}/friends")
+    public Collection<User> findUserFriends(@PathVariable int id) {
+        if (userService.findUserById(id) == null) {
+            log.info("User not found");
+            throw new NotFoundException("User not found");
+        }
+        return userService.findUserFriends(id);
+    }
+
+
+    @PutMapping("/users/{id}/friends/{friendId}")
+    public void addFriend(@PathVariable int id, @PathVariable int friendId) {
+        if (userService.findUserById(id) == null || userService.findUserById(friendId) == null) {
+            log.info("User not found");
+            throw new NotFoundException("User not found");
+        }
+        userService.addFriend(id, friendId);
+    }
+
+    @DeleteMapping("/users/{id}/friends/{friendId}")
+    public void deleteFriend(@PathVariable int id, @PathVariable int friendId) {
+        userService.deleteFriend(id, friendId);
+    }
+
+    @GetMapping("/users/{id}/friends/common/{otherId}")
+    public Collection<User> findCommonFriends(@PathVariable int id, @PathVariable int otherId) {
+        if (userService.findUserById(id) == null || userService.findUserById(otherId) == null) {
+            log.info("User not found");
+            throw new NotFoundException("User not found");
+        }
+        return userService.findCommonFriends(id, otherId);
+    }
 }

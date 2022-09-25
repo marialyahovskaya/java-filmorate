@@ -7,16 +7,17 @@ import java.util.Collection;
 
 public interface UserStorage {
 
-    public void addUser(User user);
+    void addUser(User user);
 
-//    public User findUserByEmail(String email);
+    Collection<User> findUserFriends(int id);
 
-    public User findUserById(int id);
+    User findUserById(int id);
 
-    public void deleteUser(int id);
+    void deleteUser(int id);
 
-    public void updateUser(User user);
+    void updateUser(User user);
 
-    public Collection<User> findAllUsers();
+    Collection<User> findAllUsers();
+
 
 }

@@ -10,7 +10,7 @@ import static java.time.Month.DECEMBER;
 
 @Slf4j
 public class FilmValidator {
-    public static void validate(Film film) throws ValidationException {
+    public static void validate(final Film film) throws ValidationException {
         if (film.getDuration() <= 0) {
             log.info("Film duration must be positive number");
             throw new ValidationException("Film duration must be positive number");

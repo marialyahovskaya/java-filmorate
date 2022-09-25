@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
@@ -11,7 +12,7 @@ import java.util.Collection;
 public class FilmService {
 
     private int nextId = 0;
-    private FilmStorage filmStorage;
+    private final FilmStorage filmStorage;
 
     @Autowired
     public FilmService(FilmStorage filmStorage) {
@@ -31,31 +32,37 @@ public class FilmService {
         filmStorage.addFilm(film);
     }
 
-    public Film updateFilm(final Film film){
+    public Film updateFilm(final Film film) {
         filmStorage.updateFilm(film);
         return film;
     }
 
-    public void deleteFilm(int id) {
+    public void deleteFilm(final int id) {
         filmStorage.deleteFilm(id);
     }
 
-    public Collection<Film> findAllFilms(){
+    public Collection<Film> findAllFilms() {
         return filmStorage.findAllFilms();
     }
 
-    public void addLike(int id, int userId){
-        Film film;
+    public void addLike(final int id, final int userId) {
+        final Film film;
         film = filmStorage.findFilmById(id);
         film.addLike(userId);
         filmStorage.updateFilm(film);
     }
 
-    public void deleteLike(int id, int userId){
-        Film film;
+    public void deleteLike(final int id, final int userId) {
+        final Film film;
         film = filmStorage.findFilmById(id);
+        if (!film.getLikes().contains(userId)) {
+            throw new NotFoundException("This user never liked this film in the first place");
+        }
         film.deleteLike(userId);
     }
 
+    public Collection<Film> findPopularFilms(final int count) {
+        return filmStorage.findPopularFilms(count);
+    }
 
 }

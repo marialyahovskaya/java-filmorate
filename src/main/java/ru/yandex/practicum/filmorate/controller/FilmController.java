@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -13,6 +14,7 @@ import java.util.Collection;
 @Slf4j
 @RestController
 public class FilmController {
+    @Autowired
     private FilmService filmService;
 
     @PostMapping(value = "/films")
@@ -41,13 +43,35 @@ public class FilmController {
         return filmService.findAllFilms();
     }
 
+    @GetMapping("/films/{id}")
+    public Film findFilmById(@PathVariable int id) {
+        if (filmService.findFilmById(id) == null) {
+            log.info("Film not found");
+            throw new NotFoundException("Film not found");
+        }
+        return filmService.findFilmById(id);
+    }
+
     @PutMapping("/films/{id}/like/{userId}")
-    public void addLike(int id, int userId) {
+    public void addLike(@PathVariable int id, @PathVariable int userId) {
+        if (filmService.findFilmById(id) == null) {
+            log.info("Film not found");
+            throw new NotFoundException("Film not found");
+        }
         filmService.addLike(id, userId);
     }
 
     @DeleteMapping("/films/{id}/like/{userId}")
-    public void deleteLike(int id, int userId) {
+    public void deleteLike(@PathVariable int id, @PathVariable int userId) {
+        if (filmService.findFilmById(id) == null) {
+            log.info("Film not found");
+            throw new NotFoundException("Film not found");
+        }
         filmService.deleteLike(id, userId);
+    }
+
+    @GetMapping("/films/popular")
+    public Collection<Film> findPopularFilms(@RequestParam(defaultValue = "10") int count) {
+        return filmService.findPopularFilms(count);
     }
 }

@@ -3,40 +3,46 @@ package ru.yandex.practicum.filmorate.storage;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Component
-public class InMemoryFilmStorage implements FilmStorage{
+public class InMemoryFilmStorage implements FilmStorage {
 
     private final HashMap<Integer, Film> films = new HashMap<>();
-    private final Set<String> likes = new HashSet<>();
-    // private final HashMap<Integer, Set<Integer>> likes = new HashMap<>();
 
     @Override
-    public void addFilm(Film film){
+    public void addFilm(final Film film) {
         films.put(film.getId(), film);
     }
 
     @Override
-    public Film findFilmById(int id) {
+    public Film findFilmById(final int id) {
         return films.get(id);
     }
 
     @Override
-    public void deleteFilm(int id) {
-      films.remove(id);
+    public void deleteFilm(final int id) {
+        films.remove(id);
     }
 
     @Override
-    public void updateFilm(Film film) {
+    public void updateFilm(final Film film) {
         films.put(film.getId(), film);
     }
 
-    public Collection<Film> findAllFilms(){
+    @Override
+    public Collection<Film> findAllFilms() {
         return films.values();
     }
 
+    @Override
+    public Collection<Film> findPopularFilms(final int count) {
+        final List<Film> popularFilms = new ArrayList<>(films.values());
+        Collections.sort(popularFilms);
+        if (count < popularFilms.size()) {
+            return popularFilms.subList(0, count);
+        } else {
+            return popularFilms;
+        }
+    }
 }
