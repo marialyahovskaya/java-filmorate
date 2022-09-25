@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Slf4j
 public class UserValidator {
-    public static void validate(User user) throws ValidationException {
+    public static void validate(final User user) throws ValidationException {
         if (user.getEmail() == null || user.getEmail().equals("")) {
             log.info("Email is empty");
             throw new ValidationException("Email is empty.");
