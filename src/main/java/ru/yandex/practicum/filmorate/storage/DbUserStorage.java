@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.storage;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User.UserBuilder;
@@ -10,7 +9,6 @@ import ru.yandex.practicum.filmorate.model.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.*;
 
 @Component
@@ -33,10 +31,8 @@ public class DbUserStorage implements UserStorage {
     @Override
     public User findUserById(final int id) {
 
-        // выполняем запрос к базе данных.
         SqlRowSet userRows = jdbcTemplate.queryForRowSet("select * from users where id = ?", id);
 
-        // обрабатываем результат выполнения запроса
         if (userRows.next()) {
             UserBuilder builder = User.builder();
             builder.id(userRows.getInt("id"))
@@ -46,12 +42,8 @@ public class DbUserStorage implements UserStorage {
                     .birthday(userRows.getDate("birthday").toLocalDate())
                     .friends(new HashSet<>(findUserFriends(userRows.getInt("id"))));
 
-
-            //    log.info("Найден пользователь: {} {}", user.getId(), user.getNickname());
-
             return builder.build();
         } else {
-            //   log.info("Пользователь с идентификатором {} не найден.", id);
             return null;
         }
     }

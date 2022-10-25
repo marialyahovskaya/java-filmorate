@@ -47,7 +47,9 @@ public class FilmController {
     }
 
     @GetMapping("/genres")
-    public Collection<Genre> findAllGenres() { return filmService.findAllGenres(); }
+    public Collection<Genre> findAllGenres() {
+        return filmService.findAllGenres();
+    }
 
     @GetMapping("/films/{id}")
     public Film findFilmById(@PathVariable int id) {
@@ -84,17 +86,17 @@ public class FilmController {
 
     @GetMapping("/mpa/{id}")
     public MpaRating findMpaById(@PathVariable int id) {
-       MpaRating mpa = filmService.findMpaById(id);
-       if(mpa == null ){
-           throw new NotFoundException("Mpa not found");
-       }
-       return mpa;
+        MpaRating mpa = filmService.findMpaById(id);
+        if (mpa == null) {
+            throw new NotFoundException("Mpa not found");
+        }
+        return mpa;
     }
 
     @GetMapping("/genres/{id}")
     public Genre findGenreById(@PathVariable int id) {
         Genre genre = filmService.findGenreById(id);
-        if(genre == null) {
+        if (genre == null) {
             throw new NotFoundException("Genre not found");
         }
         return genre;

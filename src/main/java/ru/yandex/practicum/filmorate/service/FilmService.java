@@ -14,17 +14,12 @@ import java.util.stream.Collectors;
 @Service
 public class FilmService {
 
-    private int nextId = 0;
     private final FilmStorage filmStorage;
 
     @Autowired
     public FilmService(FilmStorage filmStorage) {
         this.filmStorage = filmStorage;
     }
-
-    // private int generateId() {
-    //   return ++nextId;
-    //}
 
     public Film findFilmById(final int id) {
         return filmStorage.findFilmById(id);
@@ -84,5 +79,4 @@ public class FilmService {
     public Collection<Film> findPopularFilms(final int count) {
         return filmStorage.findPopularFilms(count);
     }
-
 }

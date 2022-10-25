@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.service;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
@@ -11,17 +10,11 @@ import java.util.*;
 
 @Service
 public class UserService {
-
-    private int nextId = 0;
     private final UserStorage userStorage;
 
     @Autowired
     public UserService(DbUserStorage userStorage) {
         this.userStorage = userStorage;
-    }
-
-    private int generateId() {
-        return ++nextId;
     }
 
     public User findUserById(final int id) {
@@ -51,7 +44,7 @@ public class UserService {
     }
 
     public void addFriend(final int userId, final int friendId) {
-       userStorage.addFriendship(userId, friendId);
+        userStorage.addFriendship(userId, friendId);
     }
 
     public void deleteFriend(final int userId, final int friendId) {

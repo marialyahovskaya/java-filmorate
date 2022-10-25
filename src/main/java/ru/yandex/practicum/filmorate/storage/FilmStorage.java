@@ -13,8 +13,9 @@ public interface FilmStorage {
 
     Film findFilmById(int id);
 
-    void deleteLike(int filmId, int userId);
     void addLike(int filmId, int userId);
+
+    void deleteLike(int filmId, int userId);
 
     MpaRating findMpaById(int id);
 
@@ -31,5 +32,4 @@ public interface FilmStorage {
     Collection<MpaRating> findAllMpas();
 
     Collection<Film> findPopularFilms(int count);
-
 }
