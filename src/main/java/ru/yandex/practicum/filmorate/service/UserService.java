@@ -1,8 +1,10 @@
 package ru.yandex.practicum.filmorate.service;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.DbUserStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.*;
@@ -14,7 +16,7 @@ public class UserService {
     private final UserStorage userStorage;
 
     @Autowired
-    public UserService(UserStorage userStorage) {
+    public UserService(DbUserStorage userStorage) {
         this.userStorage = userStorage;
     }
 
@@ -31,8 +33,8 @@ public class UserService {
     }
 
     public void addUser(final User user) {
-        user.setId(generateId());
-        userStorage.addUser(user);
+        int id = userStorage.addUser(user);
+        user.setId(id);
     }
 
     public User updateUser(final User user) {
@@ -49,34 +51,22 @@ public class UserService {
     }
 
     public void addFriend(final int userId, final int friendId) {
-        User user;
-        user = userStorage.findUserById(userId);
-        user.addFriend(friendId);
-        userStorage.updateUser(user);
-        user = userStorage.findUserById(friendId);
-        user.addFriend(userId);
-        userStorage.updateUser(user);
+       userStorage.addFriendship(userId, friendId);
     }
 
     public void deleteFriend(final int userId, final int friendId) {
-        final User user;
-        user = userStorage.findUserById(userId);
-        user.deleteFriend(friendId);
-        userStorage.updateUser(user);
+        userStorage.deleteFriend(userId, friendId);
     }
 
     public Collection<User> findCommonFriends(final int id, final int otherId) {
-        final Set<Integer> commonFriendsIds1;
-        final Set<Integer> commonFriendsIds2;
-        final Set<Integer> result = new HashSet<>();
-        commonFriendsIds1 = userStorage.findUserById(id).getFriends();
-        commonFriendsIds2 = userStorage.findUserById(otherId).getFriends();
-        result.addAll(commonFriendsIds1);
-        result.retainAll(commonFriendsIds2);
-        List<User> commonFriends = new ArrayList<>();
-        for (final int commonFriendsIds : result) {
-            commonFriends.add(userStorage.findUserById(commonFriendsIds));
-        }
-        return commonFriends;
+        final Set<User> userFriends;
+        final Set<User> otherUserFriends;
+        final Set<User> result = new HashSet<>();
+        userFriends = userStorage.findUserById(id).getFriends();
+        otherUserFriends = userStorage.findUserById(otherId).getFriends();
+        result.addAll(userFriends);
+        result.retainAll(otherUserFriends);
+
+        return result;
     }
 }

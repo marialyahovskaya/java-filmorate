@@ -4,9 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Builder
@@ -16,7 +14,9 @@ public class Film implements Comparable<Film> {
     private String description;
     private LocalDate releaseDate;
     private int duration;
-    final private Set<Integer> likes = new HashSet<>();
+    private MpaRating mpa;
+    private Collection<Genre> genres;
+    private Set<Integer> likes;
 
     public void addLike(final int userId) {
         likes.add(userId);
@@ -28,7 +28,7 @@ public class Film implements Comparable<Film> {
 
     @Override
     public int compareTo(Film other) {
-         return other.likes.size() - this.getLikes().size();
+        return other.likes.size() - this.getLikes().size();
     }
 
     @Override
@@ -37,6 +37,16 @@ public class Film implements Comparable<Film> {
         if (!(o instanceof Film)) return false;
         Film film = (Film) o;
         return id == film.id && duration == film.duration && Objects.equals(name, film.name) && Objects.equals(description, film.description) && Objects.equals(releaseDate, film.releaseDate) && Objects.equals(likes, film.likes);
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("description", description);
+        map.put("release_Date", releaseDate);
+        map.put("duration", duration);
+        map.put("mpa_rating_id", mpa.getId());
+        return map;
     }
 
     @Override

@@ -4,9 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Builder
@@ -16,14 +14,14 @@ public class User {
     private String login;
     private String name;
     private LocalDate birthday;
-    final private Set<Integer> friends = new HashSet<>();
+    private Set<User> friends = new HashSet<>();
 
-    public void addFriend(final int userId) {
-        friends.add(userId);
+    public void addFriend(final User user) {
+        friends.add(user);
     }
 
-    public void deleteFriend(final int userId) {
-        friends.remove(userId);
+    public void deleteFriend(final User user) {
+        friends.remove(user);
     }
 
     @Override
@@ -37,5 +35,14 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, email, login, name, birthday, friends);
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("email", email);
+        map.put("login", login);
+        map.put("name", name);
+        map.put("birthday", birthday);
+        return map;
     }
 }
