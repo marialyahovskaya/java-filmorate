@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -16,13 +17,10 @@ import java.util.HashSet;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class DbFilmStorage implements FilmStorage {
 
     private final JdbcTemplate jdbcTemplate;
-
-    public DbFilmStorage(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Override
     public int addFilm(Film film) {

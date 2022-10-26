@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.ResourceUtils;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
@@ -56,11 +57,7 @@ class UserIntegrationTests {
 
     @Test
     public void testAddUser() {
-        User user = User.builder()
-                .name("Nick")
-                .email("nick.nick@rambler.ru")
-                .login("nick.nick")
-                .birthday(LocalDate.of(1989, 10, 16)).build();
+        User user = nick();
 
         userService.addUser(user);
         User user2 = userService.findUserById(3);
@@ -83,16 +80,15 @@ class UserIntegrationTests {
     @Test
     public void testDeleteUser() {
         userService.deleteUser(1);
-        assertNull(userService.findUserById(1));
+        assertThrows(NotFoundException.class, () -> {
+            userService.findUserById(1);
+        });
     }
 
     @Test
     public void testUpdateUser() {
-        User user = User.builder().id(1)
-                .name("Nick")
-                .email("nick.nick@rambler.ru")
-                .login("nick.nick")
-                .birthday(LocalDate.of(1989, 10, 16)).build();
+        User user = nick();
+        user.setId(1);
 
         userService.updateUser(user);
         User user2 = userService.findUserById(1);
@@ -115,5 +111,13 @@ class UserIntegrationTests {
         userService.deleteFriend(1, 2);
         Collection<User> friends = userService.findUserFriends(1);
         assertEquals(0, friends.size());
+    }
+
+    private User nick() {
+        return User.builder()
+                .name("Nick")
+                .email("nick.nick@rambler.ru")
+                .login("nick.nick")
+                .birthday(LocalDate.of(1989, 10, 16)).build();
     }
 }

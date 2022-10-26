@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User.UserBuilder;
@@ -11,14 +12,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+@RequiredArgsConstructor
 @Component
 public class DbUserStorage implements UserStorage {
 
     private final JdbcTemplate jdbcTemplate;
-
-    public DbUserStorage(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Override
     public int addUser(final User user) {
