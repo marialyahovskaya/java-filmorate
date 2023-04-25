@@ -1,2 +1,5 @@
-# java-filmorate
-Template repository for Filmorate project.
+# Filmorate
+
+Рейтинги фильмов - социальная сеть с рейтингами и подбором фильмов на основании оценок друзей.
+
+REST-сервисы с использованием Java 8, Spring Boot, Maven, Lombok и взаимодействие с БД (H2) с помощью JDBC.
